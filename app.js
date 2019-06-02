@@ -10,6 +10,8 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
+var posts =[];
+
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,6 +20,7 @@ app.use(express.static("public"));
 
 app.get("/", function(req, res){
   res.render("home" , {homeStartingContent:homeStartingContent});
+  console.log(posts);
 });
 
 app.get("/about", function(req, res){
@@ -28,15 +31,24 @@ app.get("/contact", function(req, res){
   res.render("contact",{contactContent:contactContent});
 });
 
+app.get("/compose", function(req, res){
+   res.render("compose");
+});
 
 
+//Handeling the publish request in the compose page
+app.post("/compose", function(req, res){
+  //creating a new js-object
+  const new_Post = {
+    title: req.body.postTitle,
+    content: req.body.postBody
+    };
+  posts.push(new_Post);
+  res.redirect("/");
+});
 
 
-
-
-
-
-
+//server up and running
 app.listen(3000, function() {
   console.log("Server started on port 3000");
-});
+  });
